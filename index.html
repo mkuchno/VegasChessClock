@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vegas Chess Clock</title>
+        <script defer src="js/script.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/styles.css" />
+
+        <!-- font awesome 4 (app icons) -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
+    </head>
+
+    <body>
+        <!-- all layouts (home, modes, settings, about and clock) and footer -->
+        <div class="content">
+            <div class="home">
+                <div class="header">
+                    <h1 class="header__title">Vegas Chess Clock</h1>
+                    <p class="header__text">A simple app to replace awkward chess clocks</p>
+                </div>
+                <div class="mode-view">
+                    <h3 class="mode-view__desc">Currently selected mode</h3>
+                    <p class="mode-view__con">15 + 10</p>
+                </div>
+                <ul class="menu">
+                    <li class="menu__elem" data-link="clock">Start</li>
+                    <li class="menu__elem" data-link="modes">Change a mode</li>
+                    <li class="menu__elem" data-link="settings">Settings</li>
+                    <li class="menu__elem" data-link="about">About the app</li>
+                </ul>
+            </div>
+
+            <div class="modes display-none">
+                <button class="close-btn"></button>
+                <div class="header">
+                    <h1 class="header__title">Change a mode</h1>
+                </div>
+                <h2 class="modes__title">Blitz</h2>
+                <ul class="modes__list">
+                    <li class="modes__elem">3</li>
+                    <li class="modes__elem">3 + 2</li>
+                    <li class="modes__elem">5</li>
+                </ul>
+                <h2 class="modes__title">Rapid</h2>
+                <ul class="modes__list">
+                    <li class="modes__elem">10</li>
+                    <li class="modes__elem">15 + 10</li>
+                    <li class="modes__elem">30</li>
+                </ul>
+                <h2 class="modes__title">Classic</h2>
+                <ul class="modes__list">
+                    <li class="modes__elem">45 + 45</li>
+                    <li class="modes__elem">60</li>
+                </ul>
+                <h2 class="modes__title">Customize your mode</h2>
+                <div class="sliders">
+                    <div class="switch">
+                        <label for="time-switch" class="switch__info">Various time</label>
+                        <input type="checkbox" id="time-switch" class="switch__box" autocomplete="off" />
+                    </div>
+                    <div class="special-mode display-none">
+                        <h2 class="special-mode__title">Player 1</h2>
+                        <div class="slider">
+                            <span class="slider__info">Time</span>
+                            <span class="slider__value">60min</span>
+                            <input type="range" min="1" max="120" value="60" class="slider__box" autocomplete="off" />
+                        </div>
+                        <div class="slider">
+                            <span class="slider__info">Delay</span>
+                            <span class="slider__value">30s</span>
+                            <input type="range" min="0" max="60" value="30" class="slider__box" autocomplete="off" />
+                        </div>
+                        <h2 class="special-mode__title">Player 2</h2>
+                    </div>
+                    <div class="slider">
+                        <span class="slider__info">Time</span>
+                        <span class="slider__value">60min</span>
+                        <input type="range" min="1" max="120" value="60" class="slider__box" autocomplete="off" />
+                    </div>
+                    <div class="slider">
+                        <span class="slider__info">Delay</span>
+                        <span class="slider__value">30s</span>
+                        <input type="range" min="0" max="60" value="30" class="slider__box" autocomplete="off" />
+                    </div>
+                    <button class="app-btn">Choose</button>
+                </div>
+            </div>
+
+            <div class="settings display-none">
+                <button class="close-btn"></button>
+                <div class="header">
+                    <h1 class="header__title">Settings</h1>
+                </div>
+                <div class="settings__options">
+                    <h2 class="settings__title">Graphics</h2>
+                    <div class="switch">
+                        <label for="mode-switch" class="switch__info">Dark mode</label>
+                        <input type="checkbox" id="mode-switch" class="switch__box" autocomplete="off" />
+                    </div>
+                    <ul id="theme-option" class="option">
+                        <li class="option__title">Graphic themes</li>
+                        <li class="option__elem option__elem--active" data-name="default">Vegas</li>
+                        <li class="option__elem" data-name="capoeira">Capoiera</li>
+                        <li class="option__elem" data-name="sith">Sith</li>
+                    </ul>
+                    <h2 class="settings__title">Sound</h2>
+                    <div class="switch">
+                        <label for="mute-switch" class="switch__info">Mute</label>
+                        <input type="checkbox" id="mute-switch" class="switch__box" autocomplete="off" />
+                    </div>
+                    <ul id="sound-option" class="option">
+                        <li class="option__title">Sound themes</li>
+                        <li class="option__elem option__elem--active" data-name="sound1">Sound 1</li>
+                        <li class="option__elem" data-name="sound2">Sound 2</li>
+                    </ul>
+                    <div class="slider">
+                        <span class="slider__info">Volume</span>
+                        <span class="slider__value">100%</span>
+                        <input type="range" min="10" max="100" value="100" class="slider__box" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="about display-none">
+                <button class="close-btn"></button>
+                <div class="header">
+                    <h1 class="header__title">About the app</h1>
+                </div>
+                <p class="about__desc">
+                    This application was developed to have fun, learn about new technologies, methodologies and other
+                    elements of a frontend developer's work, and also because its author likes to play chess. Hope you
+                    enjoy this application.
+                </p>
+                <div class="my-quote">
+                    <p class="my-quote__text">Chess is the art of analysis.</p>
+                    <p class="my-quote__author">Mikhail Botvinnik</p>
+                </div>
+                <div class="my-quote">
+                    <p class="my-quote__text">I don't believe in psychology. I believe in good moves.</p>
+                    <p class="my-quote__author">Bobby Fisher</p>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p class="footer__desc">
+                    Made with
+                    <i class="footer__icon fa fa-heart"></i>
+                    by mkuchno
+                </p>
+            </div>
+
+            <div class="clock-container display-none" data-orientation="two-side">
+                <div class="clock">
+                    <div class="clock__part clock__part--top">
+                        <div class="clock__values">
+                            <span>15 + 10</span>
+                            <p class="clock__info">tap to start</p>
+                        </div>
+                    </div>
+                    <ul class="menu-h clock__menu">
+                        <li class="menu-h__elem" data-function="orientation">
+                            <i class="fa fa-long-arrow-left"></i>
+                        </li>
+                        <li class="menu-h__elem menu-h__elem--disabled" data-function="reset">
+                            <i class="fa fa-refresh"></i>
+                        </li>
+                        <li class="menu-h__elem menu-h__elem--disabled" data-function="state">
+                            <i class="fa fa-pause"></i>
+                        </li>
+                        <li class="menu-h__elem" data-function="close">
+                            <i class="fa fa-power-off"></i>
+                        </li>
+                        <li class="menu-h__elem" data-function="settings">
+                            <i class="fa fa-cog"></i>
+                        </li>
+                    </ul>
+                    <div class="clock__part">
+                        <div class="clock__values">
+                            <span>15 + 10</span>
+                            <p class="clock__info">tap to start</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- all app sounds -->
+        <audio src="sounds/sound1.mp3" type="audio/mpeg"></audio>
+        <audio src="sounds/sound2.mp3" type="audio/mpeg"></audio>
+    </body>
+</html>

@@ -1,0 +1,26 @@
+// LAYOUT: ALL THE CSS THAT HANDLES THE LAYOUT (CONTAINER and GRID SYSTEMS)
+
+.content {
+    margin-bottom: $footer-height + $margin-footer;
+}
+
+.sliders {
+    margin: ($margin-default * 2) $margin-content;
+    margin-bottom: 0;
+}
+
+.clock-container {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    @include mq-l {
+        transform: rotate(-90deg);
+        transform-origin: top left;
+        width: 100vh;
+        height: 100vw;
+        top: 100%;
+        left: 0;
+    }
+}

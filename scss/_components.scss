@@ -1,0 +1,559 @@
+// COMPONENTS: ANYTHING REUSABLE (BUTTONS, NAVBARS, CARDS etc.)
+
+.close-btn {
+    @include glass-effect();
+
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: $level-max;
+    width: 50px;
+    height: 50px;
+    filter: brightness(1.1);
+    background: $background;
+    background-attachment: fixed;
+
+    &::after {
+        transition: clip-path 0.5s linear 0s;
+        content: "";
+        display: block;
+        margin: auto;
+        width: 55%;
+        height: 55%;
+        background-color: $color-secondary-one;
+        clip-path: polygon(0 0, 40% 50%, 0 100%, 50% 60%, 100% 100%, 60% 50%, 100% 0, 50% 40%);
+    }
+
+    &--animate {
+        &::after {
+            clip-path: polygon(100% 100%, 60% 50%, 100% 0, 50% 40%, 0 0, 40% 50%, 0 100%, 50% 60%);
+        }
+    }
+}
+
+.header {
+    padding: 60px 5px;
+
+    &__title {
+        margin-bottom: $margin-default;
+        font-size: $font-size-xl;
+        color: white;
+        text-shadow: $neon-shadow;
+        animation: neon 3s ease-in-out 2s infinite normal none;
+    }
+
+    &__text {
+        font-size: $font-size-s;
+        color: $mode-txt-color;
+        margin: 0 $margin-default;
+    }
+}
+
+@keyframes neon {
+    5% {
+        text-shadow: none;
+        color: $neon-off-color;
+    }
+
+    10% {
+        text-shadow: $neon-shadow;
+        color: white;
+    }
+
+    60% {
+        text-shadow: $neon-shadow;
+        color: white;
+    }
+
+    63% {
+        text-shadow: none;
+        color: $neon-off-color;
+    }
+
+    66% {
+        text-shadow: $neon-shadow;
+        color: white;
+    }
+
+    69% {
+        text-shadow: none;
+        color: $neon-off-color;
+    }
+
+    72% {
+        text-shadow: $neon-shadow;
+        color: white;
+    }
+}
+
+.mode-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: $color-secondary-two;
+    padding: 35px;
+
+    &__desc {
+        margin-bottom: $margin-default;
+        font-size: $font-size-m;
+        color: white;
+    }
+
+    &__con {
+        font-size: $font-size-l;
+        font-weight: bold;
+        background-color: $color-primary;
+        mix-blend-mode: screen;
+        width: 100%;
+        padding: 0 35px;
+
+        &--animate {
+            animation: slide 0.5s linear 0s 1 normal none;
+        }
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        width: 90%;
+        height: 70%;
+        border-radius: 50px;
+        box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2) inset, -3px -3px 5px rgba(255, 255, 255, 0.2) inset;
+    }
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(-100%);
+    }
+}
+
+.menu {
+    margin: $margin-footer 0;
+    color: $color-secondary-one;
+
+    &__elem {
+        @include glass-effect();
+        @include ripple-effect(100%, 100%, 25px, 100%);
+
+        margin: $margin-default * 2;
+        padding: 10px 0;
+        font-size: $font-size-m;
+    }
+}
+
+.modes {
+    &__title {
+        @include base-title();
+
+        margin: 0 $margin-content;
+        margin-bottom: $margin-default;
+    }
+
+    &__list {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 0 22px;
+        margin-bottom: $margin-default * 3;
+    }
+
+    &__elem {
+        @include glass-effect(10px);
+        @include ripple-effect();
+
+        margin: $margin-default;
+        padding: 8px 30px;
+        font-size: $font-size-s;
+        color: $color-secondary-one;
+        flex-grow: 1;
+    }
+}
+
+.special-mode {
+    opacity: 0;
+    transition: opacity 0.5s linear 0s;
+
+    &__title {
+        color: $color-secondary-two;
+        font-size: $font-size-m;
+        padding-bottom: 3px;
+        border-bottom: 2px solid $color-secondary-two;
+    }
+
+    &--animate {
+        opacity: 1;
+    }
+}
+
+.slider {
+    @include glass-effect(15px);
+
+    padding: 10px;
+    margin: ($margin-default * 2) 0;
+    font-size: $font-size-s;
+    display: grid;
+    grid-template-areas:
+        ". info . value ."
+        ". box box box .";
+    grid-template-columns: 5px 1fr 2fr 1fr 5px;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+
+    &__info {
+        grid-area: info;
+        color: $mode-txt-color;
+    }
+
+    &__value {
+        grid-area: value;
+        color: $color-secondary-one;
+    }
+
+    &__box {
+        grid-area: box;
+        width: 100%;
+        margin-top: $margin-default;
+
+        &[type="range"] {
+            background-color: transparent;
+            -webkit-appearance: none;
+
+            &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: $color-secondary-two;
+                border: none;
+                width: 17px;
+                height: 17px;
+                border-radius: 100%;
+            }
+
+            &::-webkit-slider-runnable-track {
+                border-radius: 50%;
+                height: 25%;
+                background-color: $color-secondary-one;
+            }
+
+            &::-moz-range-thumb {
+                background-color: $color-secondary-two;
+                border: none;
+                width: 17px;
+                height: 17px;
+                border-radius: 100%;
+            }
+
+            &::-moz-range-track {
+                border-radius: 50%;
+                height: 25%;
+                background-color: $color-secondary-one;
+            }
+        }
+    }
+}
+
+.app-btn {
+    @include glass-effect();
+    @include ripple-effect();
+
+    padding: 10px 30px;
+    font-family: $font-secondary;
+    font-size: $font-size-s;
+    color: $color-secondary-one;
+}
+
+.settings {
+    &__options {
+        margin: 0 $margin-content;
+        margin-top: -$margin-default * 4;
+    }
+
+    &__title {
+        @include base-title();
+
+        margin-top: $margin-default * 4;
+        margin-bottom: $margin-default * 2;
+    }
+}
+
+.option {
+    @include glass-effect(15px);
+
+    margin-bottom: $margin-default * 2;
+    font-size: $font-size-s;
+    padding: 15px;
+
+    &__title {
+        color: $mode-txt-color;
+        margin-bottom: $margin-default * 2;
+    }
+
+    &__elem {
+        margin-bottom: $margin-default;
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3) inset, -3px -3px 10px rgba(220, 220, 220, 0.2) inset;
+        border-radius: 5px;
+        padding: 8px;
+        color: $color-secondary-one;
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 50%;
+            height: 100%;
+            border-radius: 5px;
+            background-color: $color-secondary-one;
+            transition: width 0.5s linear 0s, opacity 0.5s linear 0s;
+            z-index: $level-down;
+            opacity: 0;
+        }
+
+        &--active {
+            color: white;
+
+            &::after {
+                width: 100%;
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.switch {
+    @include glass-effect(15px);
+
+    margin-bottom: $margin-default * 2;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    place-items: center;
+    row-gap: $margin-default * 2;
+    padding: 15px;
+
+    &__info {
+        font-size: $font-size-s;
+        color: $mode-txt-color;
+        margin: 0 $margin-default;
+    }
+
+    &__box {
+        appearance: none;
+        width: 60px;
+        height: 25px;
+        border-radius: 25px;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3) inset, -3px -3px 8px rgba(220, 220, 220, 0.2) inset;
+        position: relative;
+
+        &::after {
+            content: "";
+            display: block;
+            height: 100%;
+            border-radius: 25px;
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3) inset, -3px -3px 8px rgba(220, 220, 220, 0.2) inset;
+            background-color: $color-secondary-one;
+            opacity: 0;
+            transition: opacity 0.4s linear 0s;
+        }
+
+        &::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: "";
+            background-color: $color-secondary-two;
+            width: 19px;
+            height: 19px;
+            border-radius: 100%;
+            margin: 3px;
+            transition: margin-left 0.3s linear 0s;
+            z-index: $level-up;
+        }
+
+        &:checked {
+            &::after {
+                opacity: 1;
+            }
+
+            &::before {
+                margin-left: 38px;
+            }
+        }
+    }
+}
+
+.about {
+    &__desc {
+        margin: 0 $margin-content;
+        margin-bottom: $margin-default * 5;
+        font-size: $font-size-m;
+        text-align: justify;
+        text-align-last: center;
+        line-height: 2em;
+        color: $mode-txt-color;
+
+        @include mq(335px) {
+            text-align: center;
+        }
+    }
+}
+
+.my-quote {
+    text-align: right;
+    font-size: $font-size-s;
+    font-style: italic;
+    margin: 0 $margin-content;
+    margin-top: 25px;
+    border-right: 2px solid $color-secondary-two;
+    padding: 25px 15px;
+    color: $color-secondary-two;
+
+    &__text {
+        margin-bottom: $margin-default * 2;
+    }
+
+    &__author {
+        font-weight: bold;
+
+        &::before {
+            content: "\2014  ";
+        }
+    }
+}
+
+.footer {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    background: $background;
+    z-index: $level-max;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: $footer-height;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__desc {
+        font-size: $font-size-xs;
+        color: $mode-txt-color;
+    }
+
+    &__icon {
+        color: $color-primary;
+        margin: 5px;
+    }
+}
+
+.clock {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1fr 100px 1fr;
+    overflow: hidden;
+    background: $background;
+
+    &__part {
+        display: grid;
+        color: $mode-txt-color;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+        border-radius: 20% 20% 0 0;
+        border-top: min(4vmax, 20px) solid $color-secondary-two;
+
+        &--top {
+            transform: rotate(180deg);
+        }
+
+        &--active {
+            background: $color-secondary-one;
+            color: white;
+            text-shadow: $neon-shadow;
+        }
+    }
+
+    &__values {
+        font-size: calc(100vmin / 5);
+        font-family: $font-primary;
+        place-self: center;
+        width: 100%;
+    }
+
+    &__info {
+        font-size: 0.35em;
+        font-family: $font-secondary;
+        color: $color-secondary-two;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-shadow: none;
+
+        &--active-white,
+        &--active-black {
+            &::after {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-left: 0.5em;
+                border-radius: 100%;
+                width: 1.7em;
+                height: 1.7em;
+                background-color: $color-secondary-two;
+                font-family: "FontAwesome";
+                content: "\f007";
+            }
+        }
+
+        &--active-white {
+            &::after {
+                color: white;
+            }
+        }
+
+        &--active-black {
+            &::after {
+                color: black;
+            }
+        }
+    }
+
+    &__menu {
+        @include mq-l {
+            & li {
+                box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.3);
+                border-color: $glass-border-color $glass-border-color transparent transparent;
+            }
+
+            & li:not(:first-child) > i {
+                transform: rotate(90deg);
+            }
+        }
+    }
+}
+
+.menu-h {
+    display: flex;
+    column-gap: $margin-default;
+    padding: ($margin-default * 3) $margin-default;
+
+    &__elem {
+        @include glass-effect(10px);
+        @include ripple-effect();
+
+        color: $color-secondary-one;
+        font-size: $font-size-m;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1 1 0px;
+
+        &--disabled {
+            pointer-events: none;
+            opacity: 0.3;
+        }
+    }
+}

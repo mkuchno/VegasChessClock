@@ -1,0 +1,164 @@
+// BASE: RESETS, VARIABLES, MIXINS and UTILITY CLASSES
+
+@import url("https://fonts.googleapis.com/css2?family=Lobster&family=Satisfy&display=swap");
+
+// VARIABLES
+
+:root {
+    // vegas theme
+    --color-primary: #f037a5;
+    --color-secondary-one: #db32d6;
+    --color-secondary-two: #3453da;
+
+    // light mode
+    --mode-txt-color: black;
+    --background: linear-gradient(to right, rgb(200, 200, 200), white);
+    --glass-background-color: transparent;
+    --glass-border-color: rgba(255, 255, 255, 0.5);
+}
+
+.capoeira-theme {
+    --color-primary: #d3c500;
+    --color-secondary-one: #ffa51d;
+    --color-secondary-two: #279129;
+}
+
+.sith-theme {
+    --color-primary: #f00000;
+    --color-secondary-one: #ce4040;
+    --color-secondary-two: #646464;
+}
+
+.dark-mode {
+    --mode-txt-color: white;
+    --background: #404040;
+    --glass-background-color: rgba(255, 255, 255, 0.05);
+    --glass-border-color: transparent;
+}
+
+$font-primary: "Lobster", cursive;
+$font-secondary: "Satisfy", cursive;
+
+$font-size-xs: 14px;
+$font-size-s: 18px;
+$font-size-m: 22px;
+$font-size-l: 26px;
+$font-size-xl: 36px;
+
+$color-primary: var(--color-primary);
+$color-secondary-one: var(--color-secondary-one);
+$color-secondary-two: var(--color-secondary-two);
+
+$mode-txt-color: var(--mode-txt-color);
+$background: var(--background);
+$glass-background-color: var(--glass-background-color);
+$glass-border-color: var(--glass-border-color);
+
+$neon-shadow: 0 0 10px $color-primary, 0 0 15px $color-primary;
+$neon-off-color: #c4c1c1;
+
+$margin-default: 8px;
+$margin-content: 30px;
+$margin-footer: 60px;
+
+$footer-height: 55px;
+
+$level-down: -5;
+$level-up: 5;
+$level-max: 10;
+
+// RESETS
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+body {
+    background: $background;
+    font-family: $font-secondary;
+    text-align: center;
+}
+
+h1,
+h2,
+h3 {
+    font-family: $font-primary;
+    font-size: 100%;
+}
+
+ul {
+    list-style: none;
+}
+
+button {
+    border: none;
+}
+
+// MIXINS
+
+@mixin base-title() {
+    font-size: $font-size-m;
+    background-color: $color-secondary-two;
+    color: white;
+    padding: 3px;
+}
+
+@mixin glass-effect($border-rad: 25px) {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    border-radius: $border-rad;
+    background-color: $glass-background-color;
+    border: 1px solid;
+    border-color: $glass-border-color transparent transparent $glass-border-color;
+}
+
+@mixin ripple-effect($w: 100px, $h: 100px, $b-rad: 100%, $a-h: 0px) {
+    position: relative;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: $w;
+        height: $h;
+        background-color: rgba(128, 128, 128, 0.3);
+        border-radius: $b-rad;
+        opacity: 0;
+        transition: all 0.5s linear 0s;
+        pointer-events: none;
+    }
+
+    &:active {
+        &::before {
+            width: 0px;
+            height: $a-h;
+            transition: all 0s;
+            opacity: 1;
+        }
+    }
+}
+
+@mixin mq($max-w) {
+    @media (max-width: $max-w) {
+        @content;
+    }
+}
+
+@mixin mq-l() {
+    @media (orientation: landscape) {
+        @content;
+    }
+}
+
+// UTILITY CLASSES
+
+.display-none {
+    display: none !important;
+}
+
+.pointer-events-none {
+    pointer-events: none;
+}
