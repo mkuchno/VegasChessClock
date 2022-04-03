@@ -43,7 +43,7 @@
             if (document.fullscreenElement) {
                 document.exitFullscreen();
             } else if (isClockOpen && document.fullscreenEnabled) {
-                document.documentElement.requestFullscreen({ navigationUI: "hide" });
+                document.documentElement.requestFullscreen({ navigationUI: "show" });
             }
         };
 
