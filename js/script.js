@@ -42,7 +42,7 @@
             const isClockOpen = !layouts.clock.classList.contains("display-none");
 
             if (document.fullscreenElement) {
-                if(isHomeOpen){
+                if (isHomeOpen) {
                     document.exitFullscreen();
                 }
             } else if (isClockOpen && document.fullscreenEnabled) {
