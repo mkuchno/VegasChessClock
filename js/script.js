@@ -37,6 +37,16 @@
             footer.classList.toggle("display-none");
         };
 
+        const toggleClockFullscreen = function () {
+            const isClockOpen = !layouts.clock.classList.contains("display-none");
+
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else if (isClockOpen && document.fullscreenEnabled) {
+                document.documentElement.requestFullscreen({ navigationUI: "hide" });
+            }
+        };
+
         const scrollToTop = function () {
             window.scrollTo(0, 0);
         };
@@ -59,6 +69,7 @@
                         // clock layout does not have footer
                         // footer must be toggle when opening or closing clock layout
                         toggleFooter();
+                        toggleClockFullscreen();
                     }
 
                     scrollToTop();
