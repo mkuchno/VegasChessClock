@@ -38,10 +38,13 @@
         };
 
         const toggleClockFullscreen = function () {
+            const isHomeOpen = !layouts.home.classList.contains("display-none");
             const isClockOpen = !layouts.clock.classList.contains("display-none");
 
             if (document.fullscreenElement) {
-                document.exitFullscreen();
+                if(isHomeOpen){
+                    document.exitFullscreen();
+                }
             } else if (isClockOpen && document.fullscreenEnabled) {
                 document.documentElement.requestFullscreen({ navigationUI: "hide" });
             }
