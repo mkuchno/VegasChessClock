@@ -46,7 +46,8 @@
                     document.exitFullscreen();
                 }
             } else if (isClockOpen && document.fullscreenEnabled) {
-                document.documentElement.requestFullscreen({ navigationUI: "hide" });
+                const rootElement = document.documentElement;
+                rootElement.requestFullscreen({ navigationUI: "hide" });
             }
         };
 
@@ -177,7 +178,22 @@
     const setupModule = function changeableSettings() {
         const NUMBER_REGEX = /\d+/;
 
+        // keys to local storage
+        const storageKeys = {
+            gameMode: "gameMode",
+            darkMode: "darkMode",
+            graphicTheme: "graphicTheme",
+            audioMute: "audioMute",
+            volume: "volume",
+            soundTheme: "soundTheme",
+            clockOneSide: "clockOneSide",
+        };
+
         const init = function () {
+            // function below should be called first
+            // due to user experience
+            loadLocalStorage();
+
             slidersLogic();
             specialModeSwitcher();
             gameModeSwitchers();
@@ -260,6 +276,7 @@
 
                 switcher.addEventListener("click", () => {
                     modeView.textContent = gameModeName;
+                    localStorage.setItem(storageKeys.gameMode, modeView.textContent);
                 });
             }
 
@@ -267,6 +284,7 @@
 
             customModeSwitcher.addEventListener("click", () => {
                 modeView.textContent = getCustomModeValue();
+                localStorage.setItem(storageKeys.gameMode, modeView.textContent);
             });
         };
 
@@ -277,7 +295,13 @@
 
             switcher.addEventListener("click", () => {
                 setTimeout(() => {
-                    rootElement.classList.toggle("dark-mode");
+                    const isDarkMode = rootElement.classList.toggle("dark-mode");
+
+                    if (isDarkMode) {
+                        localStorage.setItem(storageKeys.darkMode, "true");
+                    } else {
+                        localStorage.removeItem(storageKeys.darkMode);
+                    }
                 }, TRANSITION_TIME_MS);
             });
         };
@@ -293,6 +317,9 @@
 
                 if (!isDefault) {
                     rootElement.classList.add(`${themeName}-theme`);
+                    localStorage.setItem(storageKeys.graphicTheme, themeName);
+                } else {
+                    localStorage.removeItem(storageKeys.graphicTheme);
                 }
             } else {
                 console.error(`changeTheme(), wrong param: ${isString}.`);
@@ -350,8 +377,10 @@
                 if (isAudioMuted) {
                     audioElements.selected.muted = false;
                     audioElements.selected.play();
+                    localStorage.removeItem(storageKeys.audioMute);
                 } else {
                     audioElements.selected.muted = true;
+                    localStorage.setItem(storageKeys.audioMute);
                 }
             });
         };
@@ -375,6 +404,7 @@
                 const newVolume = percentToNumber(volumeSlider.value);
 
                 audioElements.selected.volume = newVolume;
+                localStorage.setItem(storageKeys.volume, newVolume);
                 playOrUnmuteAudio();
             });
         };
@@ -390,6 +420,7 @@
                 newAudio.volume = audioElements.selected.volume;
 
                 audioElements.selected = newAudio;
+                localStorage.setItem(storageKeys.soundTheme, soundName);
                 playOrUnmuteAudio();
             } else {
                 console.error(`changeSound(), wrong param: ${isString}.`);
@@ -442,7 +473,13 @@
             const iconElement = layouts.clock.querySelector("li[data-function=orientation]").firstElementChild;
 
             iconElement.classList.toggle(iconTwoSide);
-            iconElement.classList.toggle(iconOneSide);
+            const isOneSide = iconElement.classList.toggle(iconOneSide);
+
+            if (isOneSide) {
+                localStorage.setItem(storageKeys.clockOneSide, "true");
+            } else {
+                localStorage.removeItem(storageKeys.clockOneSide);
+            }
         };
 
         const clockSettings = function settingsOnClockPage() {
@@ -452,6 +489,89 @@
                 changeClockTextOrientation();
                 changeOrientationIcon();
             });
+        };
+
+        const loadGameMode = function () {
+            const gameMode = localStorage.getItem(storageKeys.gameMode);
+
+            if (gameMode) {
+                const modeView = layouts.home.querySelector(".mode-view__con");
+                modeView.textContent = gameMode;
+            }
+        };
+
+        const loadGraphicsSettings = function () {
+            const rootElement = document.documentElement;
+            const darkMode = localStorage.getItem(storageKeys.darkMode);
+
+            if (darkMode) {
+                rootElement.classList.add("dark-mode");
+
+                const switcher = layouts.settings.querySelector("#mode-switch");
+                switcher.checked = true;
+            }
+
+            const graphicTheme = localStorage.getItem(storageKeys.graphicTheme);
+
+            if (graphicTheme) {
+                rootElement.classList.add(`${graphicTheme}-theme`);
+
+                const themeOption = layouts.settings.querySelector(`li[data-name=${graphicTheme}]`);
+                const themesContainer = themeOption.parentElement;
+                changeSelection(themesContainer, themeOption);
+            }
+        };
+
+        const loadSoundSettings = function () {
+            // selected sound theme must be loaded first
+            const soundTheme = localStorage.getItem(storageKeys.soundTheme);
+
+            if (soundTheme) {
+                audioElements.selected = audioElements[soundTheme];
+
+                const soundOption = layouts.settings.querySelector(`li[data-name=${soundTheme}]`);
+                const soundsContainer = soundOption.parentElement;
+                changeSelection(soundsContainer, soundOption);
+            }
+
+            const audioMute = localStorage.getItem(storageKeys.audioMute);
+
+            if (audioMute) {
+                audioElements.selected.muted = true;
+
+                const switcher = layouts.settings.querySelector("#mute-switch");
+                switcher.checked = true;
+            }
+
+            const volume = localStorage.getItem(storageKeys.volume);
+
+            if (volume) {
+                const newVolume = parseFloat(volume);
+                audioElements.selected.volume = newVolume;
+
+                const numberToPercent = (number) => number * 100;
+                const sliderBox = layouts.settings.querySelector(".slider .slider__box");
+                const sliderValue = layouts.settings.querySelector(".slider .slider__value");
+
+                sliderBox.value = numberToPercent(newVolume);
+                sliderValue.textContent = `${numberToPercent(newVolume)}%`;
+            }
+        };
+
+        const loadClockSettings = function () {
+            const clockOneSide = localStorage.getItem(storageKeys.clockOneSide);
+
+            if (clockOneSide) {
+                changeOrientationIcon();
+                changeClockTextOrientation();
+            }
+        };
+
+        const loadLocalStorage = function loadSettingsFromPreviousSession() {
+            loadGameMode();
+            loadGraphicsSettings();
+            loadSoundSettings();
+            loadClockSettings();
         };
 
         return init();
