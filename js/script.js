@@ -380,7 +380,7 @@
                     localStorage.removeItem(storageKeys.audioMute);
                 } else {
                     audioElements.selected.muted = true;
-                    localStorage.setItem(storageKeys.audioMute);
+                    localStorage.setItem(storageKeys.audioMute, "true");
                 }
             });
         };
