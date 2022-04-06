@@ -481,6 +481,7 @@
         font-family: $font-primary;
         place-self: center;
         width: 100%;
+        pointer-events: none;
     }
 
     &__info {

@@ -570,6 +570,7 @@ button {
   font-family: "Lobster", cursive;
   place-self: center;
   width: 100%;
+  pointer-events: none;
 }
 .clock__info {
   font-size: 0.35em;
