@@ -1,8 +1,8 @@
 "use strict";
 
 (() => {
-    // add app modules when window load
-    window.addEventListener("load", () => {
+    // add app modules when window load (without resources)
+    window.addEventListener("DOMContentLoaded", () => {
         navModule();
         setupModule();
         clockModule();
