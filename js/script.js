@@ -179,14 +179,44 @@
         const NUMBER_REGEX = /\d+/;
 
         // keys to local storage
-        const storageKeys = {
-            gameMode: "gameMode",
-            darkMode: "darkMode",
-            graphicTheme: "graphicTheme",
-            audioMute: "audioMute",
-            volume: "volume",
-            soundTheme: "soundTheme",
-            clockOneSide: "clockOneSide",
+        // and functions for working with it
+        const storage = {
+            keys: {
+                gameMode: "gameMode",
+                darkMode: "darkMode",
+                graphicTheme: "graphicTheme",
+                audioMute: "audioMute",
+                volume: "volume",
+                soundTheme: "soundTheme",
+                clockOneSide: "clockOneSide",
+            },
+            isAvailable() {
+                try {
+                    const testItem = "storageTest";
+
+                    localStorage.setItem(testItem, testItem);
+                    localStorage.removeItem(testItem);
+
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+            setItem(key, value) {
+                if (this.isAvailable()) {
+                    localStorage.setItem(key, value);
+                }
+            },
+            removeItem(key) {
+                if (this.isAvailable()) {
+                    localStorage.removeItem(key);
+                }
+            },
+            getItem(key) {
+                if (this.isAvailable()) {
+                    return localStorage.getItem(key);
+                }
+            },
         };
 
         const init = function () {
@@ -276,7 +306,7 @@
 
                 switcher.addEventListener("click", () => {
                     modeView.textContent = gameModeName;
-                    localStorage.setItem(storageKeys.gameMode, modeView.textContent);
+                    storage.setItem(storage.keys.gameMode, modeView.textContent);
                 });
             }
 
@@ -284,7 +314,7 @@
 
             customModeSwitcher.addEventListener("click", () => {
                 modeView.textContent = getCustomModeValue();
-                localStorage.setItem(storageKeys.gameMode, modeView.textContent);
+                storage.setItem(storage.keys.gameMode, modeView.textContent);
             });
         };
 
@@ -298,9 +328,9 @@
                     const isDarkMode = rootElement.classList.toggle("dark-mode");
 
                     if (isDarkMode) {
-                        localStorage.setItem(storageKeys.darkMode, "true");
+                        storage.setItem(storage.keys.darkMode, "true");
                     } else {
-                        localStorage.removeItem(storageKeys.darkMode);
+                        storage.removeItem(storage.keys.darkMode);
                     }
                 }, TRANSITION_TIME_MS);
             });
@@ -317,9 +347,9 @@
 
                 if (!isDefault) {
                     rootElement.classList.add(`${themeName}-theme`);
-                    localStorage.setItem(storageKeys.graphicTheme, themeName);
+                    storage.setItem(storage.keys.graphicTheme, themeName);
                 } else {
-                    localStorage.removeItem(storageKeys.graphicTheme);
+                    storage.removeItem(storage.keys.graphicTheme);
                 }
             } else {
                 console.error(`changeTheme(), wrong param: ${isString}.`);
@@ -377,10 +407,10 @@
                 if (isAudioMuted) {
                     audioElements.selected.muted = false;
                     audioElements.selected.play();
-                    localStorage.removeItem(storageKeys.audioMute);
+                    storage.removeItem(storage.keys.audioMute);
                 } else {
                     audioElements.selected.muted = true;
-                    localStorage.setItem(storageKeys.audioMute, "true");
+                    storage.setItem(storage.keys.audioMute, "true");
                 }
             });
         };
@@ -404,7 +434,7 @@
                 const newVolume = percentToNumber(volumeSlider.value);
 
                 audioElements.selected.volume = newVolume;
-                localStorage.setItem(storageKeys.volume, newVolume);
+                storage.setItem(storage.keys.volume, newVolume);
                 playOrUnmuteAudio();
             });
         };
@@ -420,7 +450,7 @@
                 newAudio.volume = audioElements.selected.volume;
 
                 audioElements.selected = newAudio;
-                localStorage.setItem(storageKeys.soundTheme, soundName);
+                storage.setItem(storage.keys.soundTheme, soundName);
                 playOrUnmuteAudio();
             } else {
                 console.error(`changeSound(), wrong param: ${isString}.`);
@@ -476,9 +506,9 @@
             const isOneSide = iconElement.classList.toggle(iconOneSide);
 
             if (isOneSide) {
-                localStorage.setItem(storageKeys.clockOneSide, "true");
+                storage.setItem(storage.keys.clockOneSide, "true");
             } else {
-                localStorage.removeItem(storageKeys.clockOneSide);
+                storage.removeItem(storage.keys.clockOneSide);
             }
         };
 
@@ -492,7 +522,7 @@
         };
 
         const loadGameMode = function () {
-            const gameMode = localStorage.getItem(storageKeys.gameMode);
+            const gameMode = storage.getItem(storage.keys.gameMode);
 
             if (gameMode) {
                 const modeView = layouts.home.querySelector(".mode-view__con");
@@ -502,7 +532,7 @@
 
         const loadGraphicsSettings = function () {
             const rootElement = document.documentElement;
-            const darkMode = localStorage.getItem(storageKeys.darkMode);
+            const darkMode = storage.getItem(storage.keys.darkMode);
 
             if (darkMode) {
                 rootElement.classList.add("dark-mode");
@@ -511,7 +541,7 @@
                 switcher.checked = true;
             }
 
-            const graphicTheme = localStorage.getItem(storageKeys.graphicTheme);
+            const graphicTheme = storage.getItem(storage.keys.graphicTheme);
 
             if (graphicTheme) {
                 rootElement.classList.add(`${graphicTheme}-theme`);
@@ -524,7 +554,7 @@
 
         const loadSoundSettings = function () {
             // selected sound theme must be loaded first
-            const soundTheme = localStorage.getItem(storageKeys.soundTheme);
+            const soundTheme = storage.getItem(storage.keys.soundTheme);
 
             if (soundTheme) {
                 audioElements.selected = audioElements[soundTheme];
@@ -534,7 +564,7 @@
                 changeSelection(soundsContainer, soundOption);
             }
 
-            const audioMute = localStorage.getItem(storageKeys.audioMute);
+            const audioMute = storage.getItem(storage.keys.audioMute);
 
             if (audioMute) {
                 audioElements.selected.muted = true;
@@ -543,7 +573,7 @@
                 switcher.checked = true;
             }
 
-            const volume = localStorage.getItem(storageKeys.volume);
+            const volume = storage.getItem(storage.keys.volume);
 
             if (volume) {
                 const newVolume = parseFloat(volume);
@@ -559,7 +589,7 @@
         };
 
         const loadClockSettings = function () {
-            const clockOneSide = localStorage.getItem(storageKeys.clockOneSide);
+            const clockOneSide = storage.getItem(storage.keys.clockOneSide);
 
             if (clockOneSide) {
                 changeOrientationIcon();
