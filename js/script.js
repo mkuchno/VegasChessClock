@@ -193,10 +193,8 @@
             isAvailable() {
                 try {
                     const testItem = "storageTest";
-
                     localStorage.setItem(testItem, testItem);
                     localStorage.removeItem(testItem);
-
                     return true;
                 } catch (e) {
                     return false;
