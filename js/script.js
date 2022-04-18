@@ -30,6 +30,7 @@
             closeBtns();
             clockPage();
             modePage();
+            hidingWindow();
         };
 
         const toggleFooter = function () {
@@ -170,6 +171,43 @@
                     animateModeView();
                 });
             }
+        };
+
+        const fullscreenAfterStartGame = function (event) {
+            const isClockPart = event.target.classList.contains("clock__part");
+            const isStateBtn = event.target.dataset.function === "state";
+
+            // state button contains icon which may also be target of event
+            const isStateIcon = event.target.parentElement.dataset.function === "state";
+
+            if (isClockPart || isStateBtn || isStateIcon) {
+                toggleClockFullscreen();
+                this.removeEventListener("click", fullscreenAfterStartGame);
+            }
+
+            const isClockClose = layouts.clock.classList.contains("display-none");
+
+            if (isClockClose) {
+                this.removeEventListener("click", fullscreenAfterStartGame);
+            }
+        };
+
+        const hidingWindow = function eventsWhileHidingWindow() {
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState === "hidden") {
+                    const stateBtn = layouts.clock.querySelector("li[data-function=state]");
+                    const isActive = !stateBtn.classList.contains("menu-h__elem--disabled");
+                    const hasPauseIcon = Boolean(stateBtn.querySelector(".fa-pause"));
+
+                    if (isActive && hasPauseIcon) {
+                        // stop clock if necessary
+                        stateBtn.click();
+                    }
+
+                    const content = document.querySelector(".content");
+                    content.addEventListener("click", fullscreenAfterStartGame);
+                }
+            });
         };
 
         return init();
