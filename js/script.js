@@ -687,6 +687,15 @@
             },
         };
 
+        const wakeLock = {
+            // variable to hold reference needed to manually release wake lock
+            sentinel: null,
+            isSupported: "wakeLock" in navigator,
+            isNull() {
+                return this.sentinel === null;
+            },
+        };
+
         const init = function () {
             clockPreparer();
             clockOperation();
@@ -839,6 +848,25 @@
             }
         };
 
+        const requestWakeLock = async function () {
+            if (wakeLock.isSupported && wakeLock.isNull()) {
+                try {
+                    wakeLock.sentinel = await navigator.wakeLock.request("screen");
+                    wakeLock.sentinel.addEventListener("release", () => {
+                        wakeLock.sentinel = null;
+                    });
+                } catch (e) {
+                    console.error(`requestWakeLock(), ${e.name}: ${e.message}.`);
+                }
+            }
+        };
+
+        const releaseWakeLock = function () {
+            if (wakeLock.isSupported && !wakeLock.isNull()) {
+                wakeLock.sentinel.release();
+            }
+        };
+
         const clockStart = function (player) {
             const isObject = typeof player === "object";
 
@@ -850,6 +878,7 @@
                 const isIntervalCleared = !Boolean(timeInterval);
 
                 if (isIntervalCleared || !isPlayerActive) {
+                    requestWakeLock();
                     clearInterval(timeInterval);
 
                     // when time is under 10 seconds clock shows hundreds of milliseconds
@@ -867,6 +896,7 @@
                         const isTimeEnd = player.clock.time.textContent === "0.0";
 
                         if (isTimeEnd) {
+                            releaseWakeLock();
                             clearInterval(timeInterval);
                             player1.clock.part.classList.add("pointer-events-none");
                             player2.clock.part.classList.add("pointer-events-none");
@@ -985,6 +1015,7 @@
             const isStopped = Boolean(layouts.clock.querySelector(".clock__menu .fa-pause"));
 
             if (isStopped) {
+                releaseWakeLock();
                 timeInterval = clearInterval(timeInterval);
                 player1.clock.part.classList.add(classNotClickable);
                 player2.clock.part.classList.add(classNotClickable);
